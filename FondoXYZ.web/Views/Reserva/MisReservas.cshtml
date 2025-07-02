@@ -1,21 +1,15 @@
-﻿@model List<FondoXYZ.web.Models.Reserva>
+﻿<h2 style="text-align: center; color: #fc4646;">Mis Reservas</h2>
 
-@{
-    ViewData["Title"] = "Mis Reservas";
-}
-
-<h2>Mis Reservas</h2>
-
-<table class="table">
-    <thead>
+<table class="table" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+    <thead style="background-color: #fc4646; color: white; text-align: center;">
         <tr>
-            <th>Alojamiento</th>
-            <th>Fecha Reserva</th>
-            <th>Fecha Llegada</th>
-            <th>Fecha Salida</th>
-            <th>Numero Personas</th>
-            <th>Valor Total</th>
-            <th>Estado</th>
+            <th style="padding: 10px;">Alojamiento</th>
+            <th style="padding: 10px;">Fecha Reserva</th>
+            <th style="padding: 10px;">Fecha Llegada</th>
+            <th style="padding: 10px;">Fecha Salida</th>
+            <th style="padding: 10px;">Numero Personas</th>
+            <th style="padding: 10px;">Valor Total</th>
+            <th style="padding: 10px;">Estado</th>
         </tr>
     </thead>
     <tbody>
@@ -24,13 +18,13 @@
             foreach (var d in r.Detalles)
             {
                 <tr>
-                    <td>@d.Alojamiento?.Nombre</td>
-                    <td>@r.FechaReserva.ToShortDateString()</td>
-                    <td>@r.FechaInicio.ToShortDateString()</td>
-                    <td>@r.FechaFin.ToShortDateString()</td>
-                    <td>@d.NumPersonas</td>
-                    <td>@d.TotalReserva.ToString("C")</td>
-                    <td>@r.Estado</td>
+                    <td style ="padding: 8px; text-align: center;">@d.Alojamiento?.Nombre</td>
+                    <td style="padding: 8px; text-align: center;">@r.FechaReserva.ToShortDateString()</td>
+                    <td style="padding: 8px; text-align: center;">@r.FechaInicio.ToShortDateString()</td>
+                    <td style="padding: 8px; text-align: center;">@r.FechaFin.ToShortDateString()</td>
+                    <td style="padding: 8px; text-align: center;">@d.NumPersonas</td>
+                    <td style="padding: 8px; text-align: center;">@d.TotalReserva.ToString("C")</td>
+                    <td style="padding: 8px; text-align: center;">@r.Estado</td>
                 </tr>
             }
         }

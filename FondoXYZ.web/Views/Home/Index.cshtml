@@ -1,8 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Sistema de Reservas";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div style="text-align: center; padding: 50px; background-color: #f2f2f2;">
+    <h1 style="font-size: 3em; color: #fc4646; font-weight: bold;">Sistema de Reservas</h1>
+    <p style="font-size: 1.2em; color: #555;">Bienvenido a nuestro sistema de reservas en línea.</p>
+
+    <div style="margin-top: 30px;">
+
+        <a style="text-decoration: none; background-color: #fc4646; color: white; padding: 15px 30px; font-size: 1.2em; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s;" 
+                asp-controller="Reserva" asp-action="Crear">Reservar</a>
+        </a>
+    </div>
 </div>
+

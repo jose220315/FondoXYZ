@@ -1,34 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Crear Reserva";
-}
+﻿<h2 style="text-align: center; color: #fc4646;">Crear Reserva</h2>
 
-<h2>Crear Reserva</h2>
-
-<form method="post">
-    <label>Alojamiento:</label>
-    <select name="alojamientoId" required>
+<form method="post" style="max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <label for="alojamientoId" style="font-weight: bold;">Alojamiento:</label>
+    <select name="alojamientoId" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;">
         @foreach (var item in ViewBag.Alojamiento)
         {
             <option value="@item.Id">@item.Nombre</option>
         }
     </select>
-    <br />
-    <label>Fecha Inicio:</label>
-    <input type="date" name="fechaInicio" required />
-    <br />
-    <label>Fecha Fin:</label>
-    <input type="date" name="fechaFin" required />
-    <br />
-    <label>Personas:</label>
-    <input type="number" name="numPersonas" required min="1" />
     <br /><br />
-    <button type="submit">Reservar</button>
+
+    <label for="fechaInicio" style="font-weight: bold;">Fecha Inicio:</label>
+    <input type="date" name="fechaInicio" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;" />
+    <br /><br />
+
+    <label for="fechaFin" style="font-weight: bold;">Fecha Fin:</label>
+    <input type="date" name="fechaFin" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;" />
+    <br /><br />
+
+    <label for="numPersonas" style="font-weight: bold;">Personas:</label>
+    <input type="number" name="numPersonas" required min="1" style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;" />
+    <br /><br />
+
+    <button type="submit" style="background-color: #fc4646; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Reservar</button>
 </form>
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger" style="color: red; background-color: #f8d7da; padding: 15px; border-radius: 5px; margin-top: 20px;">
         @TempData["ErrorMessage"]
     </div>
 }
-
