@@ -7,7 +7,7 @@
 <form method="post">
     <label>Alojamiento:</label>
     <select name="alojamientoId" required>
-        @foreach (var item in ViewBag.Alojamientos)
+        @foreach (var item in ViewBag.Alojamiento)
         {
             <option value="@item.Id">@item.Nombre</option>
         }

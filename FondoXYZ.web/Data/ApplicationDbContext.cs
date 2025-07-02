@@ -12,12 +12,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Sede> Sedes { get; set; }
-    public DbSet<Alojamiento> Alojamientos { get; set; }
+    public DbSet<Alojamiento> Alojamiento { get; set; }
     public DbSet<Reserva> Reservas { get; set; }
     public DbSet<TipoAlojamiento> TiposAlojamiento { get; set; }
     public DbSet<Temporada> Temporadas { get; set; }
     public DbSet<Tarifa> Tarifas { get; set; }
-    public DbSet<Disponibilidad> Disponibilidades { get; set; }
+    public DbSet<Disponibilidad> Disponibilidad { get; set; }
     public DbSet<ReservaDetalle> ReservaDetalles { get; set; }
 }
 

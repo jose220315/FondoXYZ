@@ -6,7 +6,7 @@
         public int ReservaId { get; set; }
         public int AlojamientoId { get; set; }
         public int NumPersonas { get; set; }
-        public decimal Total { get; set; }
+        public decimal TotalReserva { get; set; }
 
         public Reserva Reserva { get; set; }
         public Alojamiento Alojamiento { get; set; }

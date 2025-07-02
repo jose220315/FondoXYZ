@@ -22,7 +22,7 @@ namespace FondoXYZ.web.Controllers
 
         public async Task<IActionResult> Crear()
         {
-            ViewBag.Alojamientos = await _context.Alojamientos.ToListAsync();
+            ViewBag.Alojamiento = await _context.Alojamiento.ToListAsync();
             return View();
         }
         [HttpPost]
@@ -31,7 +31,7 @@ namespace FondoXYZ.web.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             // Verificar disponibilidad de las fechas
-            var fechasOcupadas = await _context.Disponibilidades
+            var fechasOcupadas = await _context.Disponibilidad
                 .Where(d => d.AlojamientoId == alojamientoId && d.Fecha >= fechaInicio && d.Fecha <= fechaFin)
                 .AnyAsync();
 
@@ -57,20 +57,21 @@ namespace FondoXYZ.web.Controllers
             await _context.SaveChangesAsync();
 
             // Calcular el total de la reserva utilizando el SP
-            var totalReserva = await _context.Set<Reserva>()
-                .FromSqlRaw("EXEC sp_CalcularTotalReserva @AlojamientoId, @FechaInicio, @FechaFin, @NumPersonas",
-                    new SqlParameter("@AlojamientoId", alojamientoId),
-                    new SqlParameter("@FechaInicio", fechaInicio),
-                    new SqlParameter("@FechaFin", fechaFin),
-                    new SqlParameter("@NumPersonas", numPersonas))
-                .FirstOrDefaultAsync();
+            var totalReserva = await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_CalcularTotalReserva @AlojamientoId, @FechaInicio, @FechaFin, @NumPersonas",
+                new SqlParameter("@AlojamientoId", alojamientoId),
+                new SqlParameter("@FechaInicio", fechaInicio),
+                new SqlParameter("@FechaFin", fechaFin),
+                new SqlParameter("@NumPersonas", numPersonas)
+
+            );
 
             var detalle = new ReservaDetalle
             {
                 ReservaId = reserva.Id,
                 AlojamientoId = alojamientoId,
                 NumPersonas = numPersonas,
-                Total = totalReserva.TotalReserva
+                TotalReserva = totalReserva // Cambiado para reflejar el valor calculado correctamente
             };
 
             // Insertar el detalle de la reserva
@@ -81,7 +82,7 @@ namespace FondoXYZ.web.Controllers
             var fecha = fechaInicio;
             while (fecha <= fechaFin)
             {
-                _context.Disponibilidades.Add(new Disponibilidad
+                _context.Disponibilidad.Add(new Disponibilidad
                 {
                     AlojamientoId = alojamientoId,
                     Fecha = fecha,
@@ -96,6 +97,29 @@ namespace FondoXYZ.web.Controllers
 
             return RedirectToAction("MisReservas");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelarReserva(int reservaId)
+        {
+            var reserva = await _context.Reservas.FindAsync(reservaId);
+
+            if (reserva != null)
+            {
+                reserva.Estado = "Cancelada";  // Cambiar estado de la reserva
+                _context.Update(reserva);
+
+                // Eliminar las fechas ocupadas asociadas a la reserva cancelada
+                var fechasOcupadas = await _context.Disponibilidad
+                    .Where(d => d.ReservaId == reservaId)
+                    .ToListAsync();
+
+                _context.Disponibilidad.RemoveRange(fechasOcupadas);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("MisReservas");
+        }
+
 
 
 

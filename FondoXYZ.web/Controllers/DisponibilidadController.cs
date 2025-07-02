@@ -1,10 +1,12 @@
 ﻿using FondoXYZ.web.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace FondoXYZ.web.Controllers
-{
+{ 
+    [Authorize]
     public class DisponibilidadController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +24,7 @@ namespace FondoXYZ.web.Controllers
         [HttpPost]
         public async Task<IActionResult> Consultar(DateTime fechaInicio, DateTime fechaFin)
         {
-            var disponibles = await _context.Alojamientos
+            var disponibles = await _context.Alojamiento
                 .FromSqlRaw("EXEC sp_HabitacionesDisponiblesPorFecha @FechaInicio, @FechaFin",
                     new SqlParameter("@FechaInicio", fechaInicio),
                     new SqlParameter("@FechaFin", fechaFin))

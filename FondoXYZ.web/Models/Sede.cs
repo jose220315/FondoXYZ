@@ -7,7 +7,7 @@
         public string Ciudad { get; set; }
         public int CapacidadTotal { get; set; }
 
-        public ICollection<Alojamiento> Alojamientos { get; set; }
+        public ICollection<Alojamiento> Alojamiento { get; set; }
     }
 
 }

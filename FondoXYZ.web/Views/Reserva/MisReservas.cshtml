@@ -9,11 +9,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
             <th>Alojamiento</th>
-            <th>Personas</th>
-            <th>Total</th>
+            <th>Fecha Reserva</th>
+            <th>Fecha Llegada</th>
+            <th>Fecha Salida</th>
+            <th>Numero Personas</th>
+            <th>Valor Total</th>
             <th>Estado</th>
         </tr>
     </thead>
@@ -23,11 +24,12 @@
             foreach (var d in r.Detalles)
             {
                 <tr>
+                    <td>@d.Alojamiento?.Nombre</td>
+                    <td>@r.FechaReserva.ToShortDateString()</td>
                     <td>@r.FechaInicio.ToShortDateString()</td>
                     <td>@r.FechaFin.ToShortDateString()</td>
-                    <td>@d.Alojamiento?.Nombre</td>
                     <td>@d.NumPersonas</td>
-                    <td>@d.Total.ToString("C")</td>
+                    <td>@d.TotalReserva.ToString("C")</td>
                     <td>@r.Estado</td>
                 </tr>
             }
