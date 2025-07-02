@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Consultar Disponibilidad";
+}
+
+<h2>Consultar Disponibilidad</h2>
+
+<form method="post">
+    <label>Fecha Inicio:</label>
+    <input type="date" name="fechaInicio" required />
+    <br />
+    <label>Fecha Fin:</label>
+    <input type="date" name="fechaFin" required />
+    <br /><br />
+    <button type="submit">Consultar</button>
+</form>
+
+@if (ViewBag.Resultado != null)
+{
+    <h3>Alojamientos disponibles:</h3>
+    <table border="1">
+        <tr>
+            <th>Nombre</th>
+            <th>Capacidad</th>
+            <th>Número de Habitaciones</th>
+        </tr>
+        @foreach (var item in ViewBag.Resultado)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Capacidad</td>
+                <td>@item.NumHabitaciones</td>
+            </tr>
+        }
+    </table>
+}

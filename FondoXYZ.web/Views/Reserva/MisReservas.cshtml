@@ -1,0 +1,36 @@
+﻿@model List<FondoXYZ.web.Models.Reserva>
+
+@{
+    ViewData["Title"] = "Mis Reservas";
+}
+
+<h2>Mis Reservas</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Alojamiento</th>
+            <th>Personas</th>
+            <th>Total</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            foreach (var d in r.Detalles)
+            {
+                <tr>
+                    <td>@r.FechaInicio.ToShortDateString()</td>
+                    <td>@r.FechaFin.ToShortDateString()</td>
+                    <td>@d.Alojamiento?.Nombre</td>
+                    <td>@d.NumPersonas</td>
+                    <td>@d.Total.ToString("C")</td>
+                    <td>@r.Estado</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
