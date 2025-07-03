@@ -10,21 +10,72 @@
             <th style="padding: 10px;">Numero Personas</th>
             <th style="padding: 10px;">Valor Total</th>
             <th style="padding: 10px;">Estado</th>
+            <th style="padding: 10px;">Acciones</th> 
         </tr>
     </thead>
+
+    @{
+        var successMessage = TempData["SuccessMessage"];
+        var errorMessage = TempData["ErrorMessage"];
+    }
+
+    @if (successMessage != null)
+    {
+        <div class="alert alert-success" role="alert" id="successMessage">
+            @successMessage
+        </div>
+    }
+
+    @if (errorMessage != null)
+    {
+        <div class="alert alert-danger" role="alert" id="errorMessage">
+            @errorMessage
+        </div>
+    }
+
+    <script>
+
+        setTimeout(function() {
+
+            var successMsg = document.getElementById("successMessage");
+            var errorMsg = document.getElementById("errorMessage");
+
+
+            if (successMsg) {
+                successMsg.style.display = 'none';
+            }
+            if (errorMsg) {
+                errorMsg.style.display = 'none';
+            }
+        }, 5000);
+    </script>
+
     <tbody>
         @foreach (var r in Model)
         {
             foreach (var d in r.Detalles)
             {
                 <tr>
-                    <td style ="padding: 8px; text-align: center;">@d.Alojamiento?.Nombre</td>
+                    <td style="padding: 8px; text-align: center;">@d.Alojamiento?.Nombre</td>
                     <td style="padding: 8px; text-align: center;">@r.FechaReserva.ToShortDateString()</td>
                     <td style="padding: 8px; text-align: center;">@r.FechaInicio.ToShortDateString()</td>
                     <td style="padding: 8px; text-align: center;">@r.FechaFin.ToShortDateString()</td>
                     <td style="padding: 8px; text-align: center;">@d.NumPersonas</td>
                     <td style="padding: 8px; text-align: center;">@d.TotalReserva.ToString("C")</td>
                     <td style="padding: 8px; text-align: center;">@r.Estado</td>
+                    <td style="padding: 8px; text-align: center;">
+                        @if (r.Estado != "Cancelada") 
+                        {
+                            <form method="post" action="@Url.Action("CancelarReserva", "Reserva")">
+                                <input type="hidden" name="reservaId" value="@r.Id" />
+                                <button type="submit" class="btn btn-danger">Cancelar</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span style="color: red;">Cancelada</span>
+                        }
+                    </td>
                 </tr>
             }
         }

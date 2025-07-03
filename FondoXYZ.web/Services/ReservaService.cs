@@ -101,18 +101,28 @@ namespace FondoXYZ.web.Services
 
         public async Task CancelarReservaAsync(int reservaId)
         {
+
             var reserva = await _context.Reservas.FindAsync(reservaId);
+
             if (reserva != null)
             {
+
                 reserva.Estado = "Cancelada";
-                _context.Update(reserva);
+
+
+                _context.Reservas.Update(reserva);
 
                 var fechasOcupadas = await _context.Disponibilidad
                     .Where(d => d.ReservaId == reservaId)
                     .ToListAsync();
 
                 _context.Disponibilidad.RemoveRange(fechasOcupadas);
+
                 await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Reserva no encontrada.");
             }
         }
     }

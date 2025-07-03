@@ -49,9 +49,23 @@ public class ReservaController : Controller
     [HttpPost]
     public async Task<IActionResult> CancelarReserva(int reservaId)
     {
-        await _reservaService.CancelarReservaAsync(reservaId);
-        return RedirectToAction("MisReservas");
+        try
+        {
+            // Llamamos al servicio para cancelar la reserva
+            await _reservaService.CancelarReservaAsync(reservaId);
+
+            // Agregar mensaje de éxito en TempData
+            TempData["SuccessMessage"] = "La reserva ha sido cancelada exitosamente.";
+            return RedirectToAction("MisReservas");
+        }
+        catch (Exception ex)
+        {
+            // Si ocurre un error, agregar mensaje de error
+            TempData["ErrorMessage"] = $"Hubo un problema al cancelar la reserva: {ex.Message}";
+            return RedirectToAction("MisReservas");
+        }
     }
+
 
     [Authorize]
     public async Task<IActionResult> MisReservas()
