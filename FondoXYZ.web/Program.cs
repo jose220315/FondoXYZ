@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using FondoXYZ.web.Data;
 using FondoXYZ.web.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using FondoXYZ.web.Services.Interfaces;
+using FondoXYZ.web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddScoped<IDisponibilidadService, DisponibilidadService>();
+
 
 
 

@@ -1,19 +1,21 @@
 ﻿using FondoXYZ.web.Data;
+using FondoXYZ.web.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace FondoXYZ.web.Controllers
 { 
     [Authorize]
     public class DisponibilidadController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDisponibilidadService _disponibilidadService;
 
-        public DisponibilidadController(ApplicationDbContext context)
+        public DisponibilidadController(IDisponibilidadService disponibilidadService)
         {
-            _context = context;
+            _disponibilidadService = disponibilidadService;
         }
 
         public IActionResult Consultar()
@@ -24,14 +26,10 @@ namespace FondoXYZ.web.Controllers
         [HttpPost]
         public async Task<IActionResult> Consultar(DateTime fechaInicio, DateTime fechaFin)
         {
-            var disponibles = await _context.Alojamiento
-                .FromSqlRaw("EXEC sp_HabitacionesDisponiblesPorFecha @FechaInicio, @FechaFin",
-                    new SqlParameter("@FechaInicio", fechaInicio),
-                    new SqlParameter("@FechaFin", fechaFin))
-                .ToListAsync();
-
+            var disponibles = await _disponibilidadService.ConsultarDisponibilidad(fechaInicio, fechaFin);
             ViewBag.Resultado = disponibles;
             return View();
         }
     }
+
 }
