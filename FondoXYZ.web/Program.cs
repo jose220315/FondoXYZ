@@ -8,24 +8,31 @@ using FondoXYZ.web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Obtener la cadena de conexión de la base de datos
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+// Configuración de DbContext para usar SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// Configuración para Identity
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Configuración de la vista y controladores
 builder.Services.AddControllersWithViews();
 
+// Configuración de correo electrónico
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+// Registro del servicio de disponibilidad
 builder.Services.AddScoped<IDisponibilidadService, DisponibilidadService>();
 
-
-
+// Registro del servicio de Reservas
+builder.Services.AddScoped<IReservaService, ReservaService>();
 
 var app = builder.Build();
 
@@ -38,6 +45,7 @@ else
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -50,3 +58,4 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
