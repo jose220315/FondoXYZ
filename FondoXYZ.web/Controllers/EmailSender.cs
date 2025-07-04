@@ -4,14 +4,9 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
-public class EmailSender : IEmailSender
+public class EmailSender(IOptions<EmailSettings> options) : IEmailSender
 {
-    private readonly EmailSettings _settings;
-
-    public EmailSender(IOptions<EmailSettings> options)
-    {
-        _settings = options.Value;
-    }
+    private readonly EmailSettings _settings = options.Value;
 
     public Task SendEmailAsync(string email, string subject, string htmlMessage)
     {

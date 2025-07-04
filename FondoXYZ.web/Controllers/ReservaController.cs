@@ -7,22 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [Authorize]
-public class ReservaController : Controller
+public class ReservaController(ApplicationDbContext context, IReservaService reservaService, UserManager<ApplicationUser> userManager) : Controller
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IReservaService _reservaService;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public ReservaController(ApplicationDbContext context, IReservaService reservaService, UserManager<ApplicationUser> userManager)
-    {
-        _context = context;
-        _reservaService = reservaService;
-        _userManager = userManager;
-    }
-
     public async Task<IActionResult> Crear()
     {
-        ViewBag.Alojamiento = await _context.Alojamiento.ToListAsync(); 
+        ViewBag.Alojamiento = await context.Alojamiento.ToListAsync(); 
         return View();
     }
 
@@ -30,7 +19,7 @@ public class ReservaController : Controller
     [HttpPost]
     public async Task<IActionResult> Crear(int alojamientoId, DateTime fechaInicio, DateTime fechaFin, int numPersonas)
     {
-        var user = await _userManager.GetUserAsync(User);
+        var user = await userManager.GetUserAsync(User);
         var usuarioId = user.Id;
 
         // Verificar que la fecha de inicio no sea anterior a la fecha actual
@@ -48,7 +37,7 @@ public class ReservaController : Controller
         }
 
         // Busca el alojamiento Seleccionado
-        var alojamiento = await _context.Alojamiento.FindAsync(alojamientoId);
+        var alojamiento = await context.Alojamiento.FindAsync(alojamientoId);
 
         if (alojamiento == null)
         {
@@ -64,7 +53,7 @@ public class ReservaController : Controller
         }
 
         // Verificar disponibilidad de las fechas
-        var fechasOcupadas = await _reservaService.VerificarDisponibilidadAsync(alojamientoId, fechaInicio, fechaFin);
+        var fechasOcupadas = await reservaService.VerificarDisponibilidadAsync(alojamientoId, fechaInicio, fechaFin);
 
         if (fechasOcupadas)
         {
@@ -72,7 +61,7 @@ public class ReservaController : Controller
             return RedirectToAction("Crear");
         }
 
-        await _reservaService.CrearReservaAsync(alojamientoId, fechaInicio, fechaFin, numPersonas, usuarioId);
+        await reservaService.CrearReservaAsync(alojamientoId, fechaInicio, fechaFin, numPersonas, usuarioId);
 
         return RedirectToAction("MisReservas");
     }
@@ -83,7 +72,7 @@ public class ReservaController : Controller
     {
         try
         {
-            await _reservaService.CancelarReservaAsync(reservaId);
+            await reservaService.CancelarReservaAsync(reservaId);
 
             TempData["SuccessMessage"] = "La reserva ha sido cancelada exitosamente.";
             return RedirectToAction("MisReservas");
@@ -99,8 +88,8 @@ public class ReservaController : Controller
     [Authorize]
     public async Task<IActionResult> MisReservas()
     {
-        var user = await _userManager.GetUserAsync(User);
-        var reservas = await _context.Reservas
+        var user = await userManager.GetUserAsync(User);
+        var reservas = await context.Reservas
             .Include(r => r.Detalles)
             .ThenInclude(d => d.Alojamiento)
             .Where(r => r.UsuarioId == Guid.Parse(user.Id))

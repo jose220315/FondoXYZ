@@ -4,34 +4,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace FondoXYZ.web.Controllers
+namespace FondoXYZ.web.Controllers;
+
+[Authorize]
+public class TarifaController(ApplicationDbContext context, ITarifaService tarifaService) : Controller
 {
-    [Authorize]
-    public class TarifaController : Controller
+    public async Task<IActionResult> ConsultarTarifa(int alojamientoId, DateTime fechaInicio, DateTime fechaFin, int numPersonas, bool servicioLavanderia)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ITarifaService _tarifaService;
 
-        public TarifaController(ApplicationDbContext context, ITarifaService tarifaService)
-        {
-            _context = context;
-            _tarifaService = tarifaService;
-        }
+        var alojamientos = await context.Alojamiento.ToListAsync();
+        ViewBag.Alojamientos = alojamientos;
 
-        public async Task<IActionResult> ConsultarTarifa(int alojamientoId, DateTime fechaInicio, DateTime fechaFin, int numPersonas, bool servicioLavanderia)
-        {
+        // Llamada para obtener el precio total
+        var precioTotal = await tarifaService.ConsultarTarifaAsync(alojamientoId, fechaInicio, fechaFin, numPersonas, servicioLavanderia);
 
-            var alojamientos = await _context.Alojamiento.ToListAsync();
-            ViewBag.Alojamientos = alojamientos;
+        // precio total a la vista
+        ViewBag.PrecioTotal = precioTotal;
 
-            // Llamada para obtener el precio total
-            var precioTotal = await _tarifaService.ConsultarTarifaAsync(alojamientoId, fechaInicio, fechaFin, numPersonas, servicioLavanderia);
-
-            // precio total a la vista
-            ViewBag.PrecioTotal = precioTotal;
-
-            return View();
-        }
-
+        return View();
     }
+
 }

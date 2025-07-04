@@ -5,6 +5,8 @@ using FondoXYZ.web.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using FondoXYZ.web.Services.Interfaces;
 using FondoXYZ.web.Services;
+using FondoXYZ.web.Services.Mapper;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +36,11 @@ builder.Services.AddScoped<IDisponibilidadService, DisponibilidadService>();
 // Registro del servicio de Reservas
 builder.Services.AddScoped<IReservaService, ReservaService>();
 
-    builder.Services.AddScoped<ITarifaService, TarifaService>();
+// Registro del servicio de Tarifas
+builder.Services.AddScoped<ITarifaService, TarifaService>();
 
+ // O utiliza el tipo de tu clase que contiene los perfiles
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AlojamientoMapper>());
 
 var app = builder.Build();
 

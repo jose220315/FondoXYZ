@@ -1,28 +1,23 @@
-﻿using FondoXYZ.web.Data;
-using FondoXYZ.web.Models;
+﻿using AutoMapper;
+using FondoXYZ.web.Data;
+using FondoXYZ.web.Services.Dto;
 using FondoXYZ.web.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace FondoXYZ.web.Services
+namespace FondoXYZ.web.Services;
+
+public class DisponibilidadService(ApplicationDbContext context, IMapper mapper) : IDisponibilidadService
 {
-    public class DisponibilidadService : IDisponibilidadService
+    async Task<List<AlojamientoDto>> IDisponibilidadService.ConsultarDisponibilidad(DateTime fechaInicio, DateTime fechaFin)
     {
-        private readonly ApplicationDbContext _context;
+        var disponibles = await context.Alojamiento
+           .FromSqlRaw("EXEC sp_HabitacionesDisponiblesPorFecha @FechaInicio, @FechaFin",
+               new SqlParameter("@FechaInicio", fechaInicio),
+               new SqlParameter("@FechaFin", fechaFin))
+           .ToListAsync();
 
-        public DisponibilidadService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-        public async Task<List<Alojamiento>> ConsultarDisponibilidad(DateTime fechaInicio, DateTime fechaFin)
-        {
-            var disponibles = await _context.Alojamiento
-                .FromSqlRaw("EXEC sp_HabitacionesDisponiblesPorFecha @FechaInicio, @FechaFin",
-                    new SqlParameter("@FechaInicio", fechaInicio),
-                    new SqlParameter("@FechaFin", fechaFin))
-                .ToListAsync();
-
-            return disponibles;
-        }
+        return mapper.Map<List<AlojamientoDto>>(disponibles);
+        
     }
 }
