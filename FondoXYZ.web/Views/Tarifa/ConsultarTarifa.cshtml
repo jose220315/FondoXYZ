@@ -1,0 +1,45 @@
+﻿<h2 style="text-align: center; color: #fc4646;">Consultar Tarifa</h2>
+
+<form method="post" style="max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <label for="alojamientoId" style="font-weight: bold;">Alojamiento:</label>
+        <select name="alojamientoId" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;">
+            @foreach (var item in ViewBag.Alojamientos)
+            {
+                <option value="@item.Id">@item.Nombre</option>
+            }
+        </select>
+        <br /><br />
+
+    <label for="fechaInicio" style="font-weight: bold;">Fecha Inicio:</label>
+    <input type="date" name="fechaInicio" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;" />
+    <br /><br />
+
+    <label for="fechaFin" style="font-weight: bold;">Fecha Fin:</label>
+    <input type="date" name="fechaFin" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;" />
+    <br /><br />
+
+    <label for="numPersonas" style="font-weight: bold;">Personas:</label>
+    <input type="number" name="numPersonas" required min="1" style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;" />
+    <br /><br />
+
+        <label for="lavanderia" style="display: block; margin-bottom: 8px;">
+            <input type="checkbox" id="lavanderia" name="lavanderia" style="margin-right: 8px;"> ¿Requiere servicio de lavandería?
+        </label>
+        <br /><br />
+
+    <button type="submit" style="background-color: #fc4646; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Reservar</button>
+</form>
+
+@if (ViewBag.PrecioTotal != null)
+{
+    <h3 style="text-align: center; color: #333;">Precio Total: $@ViewBag.PrecioTotal</h3>
+}
+
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" style="color: red; background-color: #f8d7da; padding: 15px; border-radius: 5px; margin-top: 20px;">
+        @TempData["ErrorMessage"]
+    </div>
+}

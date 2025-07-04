@@ -1,9 +1,6 @@
-﻿using FondoXYZ.web.Data;
-using FondoXYZ.web.Services.Interfaces;
+﻿using FondoXYZ.web.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace FondoXYZ.web.Controllers

@@ -10,7 +10,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
-
     public DbSet<Sede> Sedes { get; set; }
     public DbSet<Alojamiento> Alojamiento { get; set; }
     public DbSet<Reserva> Reservas { get; set; }

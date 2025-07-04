@@ -15,13 +15,11 @@ namespace FondoXYZ.web.Services
         {
             _context = context;
         }
-
         public async Task<decimal> CalcularTotalReservaAsync(int alojamientoId, DateTime fechaInicio, DateTime fechaFin, int numPersonas)
         {
            
             var query = "EXEC sp_CalcularTotalReserva @AlojamientoId, @FechaInicio, @FechaFin, @NumPersonas";
-
-           
+     
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
                 command.CommandText = query;

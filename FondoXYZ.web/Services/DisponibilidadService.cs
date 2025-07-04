@@ -3,9 +3,6 @@ using FondoXYZ.web.Models;
 using FondoXYZ.web.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace FondoXYZ.web.Services
 {
@@ -17,7 +14,6 @@ namespace FondoXYZ.web.Services
         {
             _context = context;
         }
-
         public async Task<List<Alojamiento>> ConsultarDisponibilidad(DateTime fechaInicio, DateTime fechaFin)
         {
             var disponibles = await _context.Alojamiento

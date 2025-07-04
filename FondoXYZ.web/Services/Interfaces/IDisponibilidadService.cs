@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using FondoXYZ.web.Models;
+﻿using FondoXYZ.web.Models;
 
 namespace FondoXYZ.web.Services.Interfaces
 {

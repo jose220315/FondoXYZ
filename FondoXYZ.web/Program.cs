@@ -34,6 +34,9 @@ builder.Services.AddScoped<IDisponibilidadService, DisponibilidadService>();
 // Registro del servicio de Reservas
 builder.Services.AddScoped<IReservaService, ReservaService>();
 
+    builder.Services.AddScoped<ITarifaService, TarifaService>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
