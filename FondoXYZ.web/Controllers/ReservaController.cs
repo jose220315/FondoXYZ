@@ -26,11 +26,26 @@ public class ReservaController : Controller
         return View();
     }
 
+    //Crear Reserva
     [HttpPost]
     public async Task<IActionResult> Crear(int alojamientoId, DateTime fechaInicio, DateTime fechaFin, int numPersonas)
     {
         var user = await _userManager.GetUserAsync(User);
         var usuarioId = user.Id;
+
+        // Verificar que la fecha de inicio no sea anterior a la fecha actual
+        if (fechaInicio < DateTime.Today)
+        {
+            TempData["ErrorMessage"] = "La fecha de inicio no puede ser anterior a la fecha actual.";
+            return RedirectToAction("Crear");
+        }
+
+        // Verificar que la fecha final no sea anterior a la fecha de inicio
+        if (fechaFin < fechaInicio)
+        {
+            TempData["ErrorMessage"] = "La fecha final no puede ser anterior a la fecha de inicio.";
+            return RedirectToAction("Crear");
+        }
 
         // Verificar disponibilidad de las fechas
         var fechasOcupadas = await _reservaService.VerificarDisponibilidadAsync(alojamientoId, fechaInicio, fechaFin);
@@ -46,6 +61,7 @@ public class ReservaController : Controller
         return RedirectToAction("MisReservas");
     }
 
+    //Cancelar Reserva
     [HttpPost]
     public async Task<IActionResult> CancelarReserva(int reservaId)
     {
@@ -63,7 +79,7 @@ public class ReservaController : Controller
         }
     }
 
-
+    //Consultar Mis Reservas
     [Authorize]
     public async Task<IActionResult> MisReservas()
     {
