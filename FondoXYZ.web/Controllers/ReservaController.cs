@@ -47,6 +47,22 @@ public class ReservaController : Controller
             return RedirectToAction("Crear");
         }
 
+        // Busca el alojamiento Seleccionado
+        var alojamiento = await _context.Alojamiento.FindAsync(alojamientoId);
+
+        if (alojamiento == null)
+        {
+            TempData["ErrorMessage"] = "Alojamiento no encontrado.";
+            return RedirectToAction("Crear");
+        }
+
+        // Verificar que el número de personas no supere la capacidad máxima del alojamiento
+        if (numPersonas > alojamiento.Capacidad)
+        {
+            TempData["ErrorMessage"] = $"El número de personas no puede superar la capacidad máxima de {alojamiento.Capacidad} personas.";
+            return RedirectToAction("Crear");
+        }
+
         // Verificar disponibilidad de las fechas
         var fechasOcupadas = await _reservaService.VerificarDisponibilidadAsync(alojamientoId, fechaInicio, fechaFin);
 
